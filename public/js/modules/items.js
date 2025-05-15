@@ -1,3 +1,4 @@
+import { Vector2D } from "./utils/vector2d.js";
 import { egi } from './utils/graphics.js';
 
 export var ITEM_DEFINITIONS = {
