@@ -46,6 +46,8 @@ export default class Agent {
     this.behaviourManager.update(delta);
     this.movementManager.update(delta);
 
+    this.wrapWorld();
+
     // check death
     if (this.stateManager.vars.health <= 0) {
       this.isDead = true;
@@ -62,5 +64,14 @@ export default class Agent {
       this.world.debugEnabled,
       this.viewRange
     );
+  }
+
+  wrapWorld() {
+    // teleport if out of bounds
+    this.world.wrapAround(this.position);
+    // cost = speed * energy drainRate
+    const speed = this.velocity.length();
+    const cost  = speed * this.config.drainRates.energy;
+    this.stateManager.vars.energy = Math.max(0, this.stateManager.vars.energy - cost);
   }
 }

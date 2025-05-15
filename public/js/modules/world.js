@@ -25,7 +25,7 @@ export class World {
 
     this.spawnBases(1);
     this.spawnItems(0);
-    this.spawnAgents(0);
+    this.spawnAgents(4);
   }
 
   togglePause() {
@@ -130,6 +130,7 @@ export class World {
       position.y += this.cy;
     }
   }
+
   transformMatrix(position, heading, side) {
     return Matrix33.buildTransform(position, heading, side);
   }
