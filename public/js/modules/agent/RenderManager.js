@@ -6,21 +6,29 @@ export default class RenderManager {
     egi.initialize(ctx);
   }
 
-  draw(position, velocity, stateVars, inventoryCount, showInfo, debugEnabled, viewRange) {
-    // draw agent shape
+  draw(position, velocity, stateVars, inventoryCount, showInfo, debugEnabled, viewRange, radius) {
+    const angle = Math.atan2(velocity.y, velocity.x);
+    let p1, p2, p3;
+
+    // draw shape
     switch (this.agent.config.shape) {
       case 'pentagon':
-        egi.drawPolygon(position, 5, 8, Math.atan2(velocity.y, velocity.x));
+        egi.drawPentagon(position, 5, true);
         break;
+
       default:
         egi.drawCircle(position, 8);
     }
 
     // state info overlay
     if (showInfo) {
-      const info = `⚡${stateVars.energy.toFixed(0)} ❤️${stateVars.health.toFixed(0)} ` +
-                   `🍔${stateVars.hunger.toFixed(0)} 💧${stateVars.thirst.toFixed(0)} ` +
-                   `🎒${inventoryCount}`;
+      const info =
+        ` ⚡${stateVars.energy.toFixed(0)}` +
+        ` ❤️${stateVars.health.toFixed(0)}` +
+        ` 🍔${stateVars.hunger.toFixed(0)}` +
+        ` 💧${stateVars.thirst.toFixed(0)} ` +
+        ` 🎒${inventoryCount}`;
+
       egi.setColor('ORANGE');
       egi.drawText(position.x + 10, position.y + 10, info);
     }

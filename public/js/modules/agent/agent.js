@@ -12,15 +12,16 @@ export default class Agent {
     inventoryCapacity: 5,
     baseSpeed: 50,
     drainRates: { energy: 0.1, hunger: 1.0, thirst: 1.5 },
-    shape: 'triangle',
+    shape: 'pentagon',
     viewRange: 50,
     radius: 8, // collision radius
   };
 
   constructor(position, world, home, config = {}) {
-    this.id = Agent.nextId++;
-    this.world = world;
-    this.home = home;
+    this.id     = Agent.nextId++;
+    this.world  = world;
+    this.home   = home;
+    this.color  = home.color;
     this.config = { ...Agent.defaultConfig, ...config };
 
     // State, Inventory, Movement, behaviour, Rendering

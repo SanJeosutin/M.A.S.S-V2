@@ -25,7 +25,7 @@ export class World {
 
     this.spawnBases(1);
     this.spawnItems(0);
-    this.spawnAgents(5);
+    this.spawnAgents(0);
   }
 
   togglePause() {
