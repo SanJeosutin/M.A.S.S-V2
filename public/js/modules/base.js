@@ -1,5 +1,5 @@
-import { Vector2D } from './vector2d.js';
-import { egi } from './graphics.js';
+import { Vector2D } from "./utils/vector2d.js";
+import { egi } from './utils/graphics.js';
 
 export class Base {
     static nextId = 1;
@@ -43,7 +43,7 @@ export class Base {
     render() {
         egi.setColor(this.color);
         egi.setStrokeWidth(2);
-        egi.drawRhombus(this.position, this.radius * 2, this.radius * 2);
+        egi.drawPentagon(this.position, this.radius);
         egi.drawText(this.position.x - this.radius, this.position.y - this.radius - 5, this.name);
 
         if (this.world.showInfo) {
@@ -53,7 +53,7 @@ export class Base {
             egi.setColor('AQUA');
             for (var i = 0; i < this.residents.length; i++) {
                 var agent = this.residents[i];
-                var line = 'Agent' + agent.id + ' holds: ' + (agent.inventory.map(function (it) { return it.name; }).join(', ') || 'None');
+                var line = 'Agent' + agent.id + ' holds: ' + (agent.inventory.items.map(it => it.name).join(', ') || 'None');
                 egi.drawText(textX, textY, line);
                 textY += 14;
             }

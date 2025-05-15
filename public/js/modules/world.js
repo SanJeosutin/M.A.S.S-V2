@@ -1,7 +1,7 @@
-import { egi } from './graphics.js';
-import { Matrix33 } from './matrix33.js';
+import { egi } from './utils/graphics.js';
+import { Matrix33 } from './utils/matrix33.js';
 
-import { Agent } from './agent.js';
+import Agent from './agent/agent.js';
 import { Base } from './base.js';
 import { Item, ITEM_DEFINITIONS } from './items.js';
 
@@ -24,8 +24,8 @@ export class World {
     this.bases = [];
 
     this.spawnBases(1);
-    this.spawnItems(256);
-    this.spawnAgents(1);
+    this.spawnItems(0);
+    this.spawnAgents(5);
   }
 
   togglePause() {

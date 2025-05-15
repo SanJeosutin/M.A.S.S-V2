@@ -1,5 +1,4 @@
-import { Vector2D } from './vector2d.js';
-import { egi } from './graphics.js';
+import { egi } from './utils/graphics.js';
 
 export var ITEM_DEFINITIONS = {
     food: {

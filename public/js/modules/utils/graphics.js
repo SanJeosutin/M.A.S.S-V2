@@ -78,8 +78,23 @@ export const egi = {
     else this.context.stroke();
   },
 
+  drawPentagon(center, radius, fill = false) {
+    const pts = [];
+    for (let i = 0; i < 5; i++) {
+      const angle = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
+      pts.push({ x: center.x + radius * Math.cos(angle), y: center.y + radius * Math.sin(angle) });
+    }
+    this.context.beginPath();
+    this.context.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) {
+      this.context.lineTo(pts[i].x, pts[i].y);
+    }
+    this.context.closePath();
+    if (fill) this.context.fill(); else this.context.stroke();
+  },
+
   drawText(x, y, text, align = 'start') {
     this.context.textAlign = align;
     this.context.fillText(text, x, y);
-  }
+  },
 };
