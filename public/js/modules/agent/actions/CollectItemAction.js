@@ -1,8 +1,10 @@
 import Action from '../Action.js';
 
 export class CollectItemAction extends Action {
-  constructor() {
+  constructor(agent) {
     super('CollectItem', 2);
+    
+    this.agent = agent;
     this.addEffect('hasUsefulItem', true);
     this.reset();
   }

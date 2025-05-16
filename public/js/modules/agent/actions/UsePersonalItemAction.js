@@ -1,8 +1,10 @@
 import Action from '../Action.js';
 
 export class UsePersonalItemAction extends Action {
-  constructor() {
+  constructor(agent) {
     super('UsePersonalItem', 1);
+    
+    this.agent = agent;
     this.addPrecondition('hasUsefulItem', true);
     this.addEffect('hasUsefulItem', false);
   }

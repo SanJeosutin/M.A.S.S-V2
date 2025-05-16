@@ -1,8 +1,10 @@
 import Action from '../Action.js';
 
 export class ReturnItemAction extends Action {
-  constructor() {
+  constructor(agent) {
     super('ReturnItem', 1);
+
+    this.agent = agent;
     // only do this if agent is carrying something
     this.addPrecondition('hasUsefulItem', true);
     // dropped it at base

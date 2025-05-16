@@ -1,8 +1,10 @@
 import Action from '../Action.js';
 
 export class HelpTeammateAction extends Action {
-  constructor() {
+  constructor(agent) {
     super('HelpTeammate', 2);
+
+    this.agent = agent;
     this.addPrecondition('teammateInNeed', true);
     this.addEffect('teammateInNeed', false);
   }

@@ -10,11 +10,11 @@ export default class behaviourManager {
 
     this.planner = new GOAPPlanner();
     this.availableActions = [
-      new CollectItemAction(),
-      new UsePersonalItemAction(),
-      new UseBaseItemAction(),
-      new HelpTeammateAction(),
-      new ReturnItemAction(),
+      new CollectItemAction(this.agent),
+      new UsePersonalItemAction(this.agent),
+      new UseBaseItemAction(this.agent),
+      new HelpTeammateAction(this.agent),
+      new ReturnItemAction(this.agent),
     ];
 
     this.currentPlan = [];
@@ -24,6 +24,8 @@ export default class behaviourManager {
   update(delta) {
     // If no action or current is done, plan or wander
     if (!this.currentAction || this.currentAction.isDone()) {
+      // clear every action back to its original state
+      this.availableActions.forEach(a => a.reset());
 
       // Build a new plan if needed
       if (this.currentPlan.length === 0) {
@@ -74,11 +76,16 @@ export default class behaviourManager {
         return;
       }
     }
-    // Execute current GOAP action
-    if (this.currentAction) {
-      this.currentAction.perform(this.agent);
-    }
 
+    // Execute current GOAP action (and mark it done if it succeeded)
+    if (this.currentAction) {
+      const succeeded = this.currentAction.perform(this.agent);
+      if (succeeded) {
+        this.currentAction.done = true;
+        this.currentAction = null;    // so on next tick we re-plan
+      }
+    }
+    // only wander when you have absolutely no GOAP action running
     this.wander.execute(delta);
   }
 }

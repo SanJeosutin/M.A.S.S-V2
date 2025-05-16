@@ -1,8 +1,10 @@
 import Action from '../Action.js';
 
 export class UseBaseItemAction extends Action {
-  constructor() {
+  constructor(agent) {
     super('UseBaseItem', 1);
+    
+    this.agent = agent;
     this.addPrecondition('needsHealth', true);
     this.addEffect('needsHealth', false);
   }
