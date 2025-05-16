@@ -11,7 +11,6 @@ export const egi = {
     YELLOW: '#ffff00',
     PINK: '#ffc0cb',
     BROWN: '#a52a2a',
-    BLACK: '#000000'
   },
 
   initialize(ctx) {

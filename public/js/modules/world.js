@@ -24,7 +24,7 @@ export class World {
     this.bases = [];
 
     this.spawnBases(1);
-    this.spawnItems(0);
+    this.spawnItems(256);
     this.spawnAgents(4);
   }
 
