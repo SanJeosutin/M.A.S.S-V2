@@ -4,4 +4,4 @@ export * from './actions/CollectItemAction.js';
 export * from './actions/UsePersonalItemAction.js';
 export * from './actions/UseBaseItemAction.js';
 export * from './actions/HelpTeammateAction.js';
-
+export * from './actions/ReturnItemAction.js';

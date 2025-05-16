@@ -5,11 +5,21 @@ export default class MovementManager {
   }
 
   update(delta) {
-    // velocity adjusted by desired behaviour
-    this.agent.position.x += this.agent.velocity.x * this.baseSpeed * delta;
-    this.agent.position.y += this.agent.velocity.y * this.baseSpeed * delta;
+    let vars = this.agent.stateManager.vars;
 
-    // collision avoidance: push agents apart if overlapping
+    // exhaustion
+    if (vars.energy === 0 && !this.agent.stateManager.isExhausted) {
+      this.agent.stateManager.isExhausted = true;
+      console.log(`Agent ${this.agent.id} is now exhausted: speed halved and health draining`);
+    }
+
+    const speedFactor = this.agent.stateManager.isExhausted ? 0.15 : 1.0;
+
+    // integrate movement
+    this.agent.position.x += this.agent.velocity.x * this.baseSpeed * speedFactor * delta;
+    this.agent.position.y += this.agent.velocity.y * this.baseSpeed * speedFactor * delta;
+
+    // collision avoidance
     const minDist = this.agent.radius * 2;
     this.agent.world.agents.forEach(other => {
       if (other === this.agent) return;

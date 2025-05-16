@@ -23,5 +23,21 @@ export default class WanderBehaviour {
     const newVel = wanderForce.normalise();
     this.agent.velocity.x = newVel.x;
     this.agent.velocity.y = newVel.y;
+
+    
+    // collision / pickup check:
+    for (let i = 0; i < this.agent.world.items.length; i++) {
+      const item = this.agent.world.items[i];
+      const dist = this.agent.position.distance(item.position);
+      // assume both have a `radius` for trigger range
+      if (dist <= this.agent.radius + item.radius) {
+        // pick it up immediately
+        this.agent.inventory.add(item);
+        this.agent.world.remove(item);
+        console.log('[Wander] stumbled on item — picked it up!');
+        // if your GOAP planner uses worldState.hasUsefulItem, it'll see the new item next tick
+        break;  
+      }
+    }
   }
 }

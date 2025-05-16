@@ -7,13 +7,28 @@ export default class RenderManager {
   }
 
   draw(position, velocity, stateVars, inventoryCount, showInfo, debugEnabled, viewRange, radius) {
-    const angle = Math.atan2(velocity.y, velocity.x);
-    let p1, p2, p3;
+    const angle = velocity.length() > 0
+      ? Math.atan2(velocity.y, velocity.x)
+      : 0;
 
     // draw shape
     switch (this.agent.config.shape) {
-      case 'pentagon':
-        egi.drawPentagon(position, 5, true);
+      case 'triangle':
+        egi.drawTriangle(
+          {
+            x: position.x + radius * Math.cos(angle),
+            y: position.y + radius * Math.sin(angle)
+          }, 
+          {
+            x: position.x +  radius * Math.cos(angle +  (4 * Math.PI / 5)),
+            y: position.y +  radius * Math.sin(angle +  (4 * Math.PI / 5))
+          },
+          {
+            x: position.x +  radius * Math.cos(angle -  (4 * Math.PI / 5)),
+            y: position.y +  radius * Math.sin(angle -  (4 * Math.PI / 5))
+          },
+          true
+        );
         break;
 
       default:
@@ -50,7 +65,7 @@ export default class RenderManager {
       egi.drawText(
         position.x + 8,
         position.y + 14,
-        'Spd:' + velocity.length().toFixed(1)
+        'Speed: ' + velocity.length().toFixed(1)
       );
     }
   }

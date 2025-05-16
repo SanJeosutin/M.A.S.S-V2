@@ -24,7 +24,7 @@ export class World {
     this.bases = [];
 
     this.spawnBases(1);
-    this.spawnItems(256);
+    this.spawnItems(32);
     this.spawnAgents(4);
   }
 
@@ -58,8 +58,9 @@ export class World {
   }
 
   spawnAgents(count) {
-    for (var i = 0; i < count; i++) {
+    for (var i = 1; i < count; i++) {
       if (this.bases.length === 0) break;
+      
       var randomIndex = Math.floor(Math.random() * this.bases.length);
       var homeBase = this.bases[randomIndex];
       // start the agent at its home base’s position:
@@ -88,11 +89,11 @@ export class World {
     }
   }
 
-
   update(delta) {
     if (this.paused) {
       return;
     }
+    
     for (var i = 0; i < this.agents.length; i++) {
       this.agents[i].update(delta);
     }
@@ -108,11 +109,12 @@ export class World {
     for (var i = 0; i < this.agents.length; i++) {
       this.agents[i].render();
     }
+
     if (this.showInfo) {
       this.ctx.fillStyle = '#ffffff';
       this.ctx.fillText('Agents: ' + this.agents.length, 10, 20);
-      this.ctx.fillText('Items: ' + this.items.length, 10, 40);
-      this.ctx.fillText('Bases: ' + this.bases.length, 10, 60);
+      this.ctx.fillText('Items : ' + this.items.length, 10, 40);
+      this.ctx.fillText('Bases : ' + this.bases.length, 10, 60);
     }
   }
 

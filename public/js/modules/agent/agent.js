@@ -1,4 +1,5 @@
 import { Vector2D } from "../utils/vector2d.js";
+
 import MovementManager from "./Managers/MovementManager.js";
 import RenderManager from "./Managers/RenderManager.js";
 import StateManager from "./Managers/StateManager.js";
@@ -7,21 +8,23 @@ import InventoryManager from "./Managers/InventoryManager.js";
 
 export default class Agent {
   static nextId = 1;
+
   static defaultConfig = {
     initialState: { energy: 100, health: 100, hunger: 100, thirst: 100 },
     inventoryCapacity: 5,
     baseSpeed: 50,
-    drainRates: { energy: 0.1, hunger: 1.0, thirst: 1.5 },
-    shape: 'pentagon',
+    drainRates: { energy: 0.01, hunger: 1.0, thirst: 1.5 },
+    shape: 'triangle',
     viewRange: 50,
     radius: 8, // collision radius
   };
 
   constructor(position, world, home, config = {}) {
-    this.id     = Agent.nextId++;
-    this.world  = world;
-    this.home   = home;
-    this.color  = home.color;
+    this.id = Agent.nextId++;
+
+    this.world = world;
+    this.home = home;
+    this.color = home.color;
     this.config = { ...Agent.defaultConfig, ...config };
 
     // State, Inventory, Movement, behaviour, Rendering
@@ -37,11 +40,10 @@ export default class Agent {
     this.renderManager = new RenderManager(this, this.world.ctx, this.config.shape);
 
     this.isDead = false;
+    this.isExhaused = false;
   }
 
   update(delta) {
-    if (this.isDead) return;
-
     this.stateManager.update(delta);
     this.behaviourManager.update(delta);
     this.movementManager.update(delta);
@@ -62,7 +64,8 @@ export default class Agent {
       this.inventory.items.length,
       this.world.showInfo,
       this.world.debugEnabled,
-      this.viewRange
+      this.viewRange,
+      this.radius
     );
   }
 
@@ -71,7 +74,7 @@ export default class Agent {
     this.world.wrapAround(this.position);
     // cost = speed * energy drainRate
     const speed = this.velocity.length();
-    const cost  = speed * this.config.drainRates.energy;
+    const cost = speed * this.config.drainRates.energy;
     this.stateManager.vars.energy = Math.max(0, this.stateManager.vars.energy - cost);
   }
 }

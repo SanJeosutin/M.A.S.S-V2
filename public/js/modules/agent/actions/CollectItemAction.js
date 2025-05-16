@@ -2,32 +2,58 @@ import Action from '../Action.js';
 
 export class CollectItemAction extends Action {
   constructor() {
-    super('CollectUsefulItem', 2);
+    super('CollectItem', 2);
     this.addEffect('hasUsefulItem', true);
+    this.reset();
   }
 
   checkProceduralPrecondition(agent) {
-    const items = agent.world.items.filter(i => i.value > 10);
-    if (!items.length) return false;
-    // pick nearest
-    this.target = items.reduce((a,b) =>
-      agent.position.distance(b.position) < agent.position.distance(a.position) ? b : a
-    );
+    // find the nearest useful item in the world
+    let closest = null;
+    let closestDist = Infinity;
+    for (const item of agent.world.items) {
+      if (!item.isUseful) continue;
+      const d = agent.position.distanceTo(item.position);
+      if (d < closestDist) {
+        closestDist = d;
+        closest = item;
+      }
+    }
+    if (!closest) {
+      // no items available right now
+      return false;
+    }
+    // store it for perform()
+    this.target = closest;
     return true;
   }
 
   perform(agent) {
-    const dist = agent.position.distance(this.target.position);
-    if (dist > agent.radius + 1) {
-      const dir = this.target.position.subtract(agent.position).normalise();
-      agent.velocity.x = dir.x;
-      agent.velocity.y = dir.y;
-      return false;
+    // — if we don’t yet have a target, try to find one now —
+    if (!this.target) {
+      if (!this.checkProceduralPrecondition(agent)) {
+        console.log('[GOAP][CollectItem] No item found — aborting action');
+        this.completed = true;
+        return true; // tell the behaviour manager we're done (no-op)
+      }
     }
+    
+    // if we still have energy, move toward the item
+    if (!agent.position.equals(this.target.position)) {
+      agent.moveToward(this.target.position);
+      return false;  // not done until we arrive
+    }
+
+    // arrived! pick it up
     agent.inventory.add(this.target);
-    agent.world.items = agent.world.items.filter(i => i !== this.target);
-    agent.velocity.zero();
+    agent.world.remove(this.target);
     this.completed = true;
     return true;
+  }
+
+  reset() {
+    this.completed = false;
+    this.target = null;
+    this.cost = 1;
   }
 }
