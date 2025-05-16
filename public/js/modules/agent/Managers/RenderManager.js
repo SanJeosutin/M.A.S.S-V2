@@ -1,4 +1,4 @@
-import { egi } from "../utils/graphics.js";
+import { egi } from "../../utils/graphics.js";
 
 export default class RenderManager {
   constructor(agent, ctx, shape = 'circle') {

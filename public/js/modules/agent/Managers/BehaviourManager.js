@@ -1,7 +1,7 @@
-import WanderBehaviour from "./behaviours/WanderBehaviour.js";
+import WanderBehaviour from "../behaviours/WanderBehaviour.js";
 //import Flockbehaviour from "./behaviours/FlockBehaviour.js";
 
-import { GOAPPlanner, CollectItemAction, UsePersonalItemAction, UseBaseItemAction, HelpTeammateAction } from "./goap.js";
+import { GOAPPlanner, CollectItemAction, UsePersonalItemAction, UseBaseItemAction, HelpTeammateAction } from "../goap.js";
 
 export default class behaviourManager {
   constructor(agent) {

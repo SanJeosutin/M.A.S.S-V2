@@ -1,9 +1,9 @@
 import { Vector2D } from "../utils/vector2d.js";
-import MovementManager from "./MovementManager.js";
-import RenderManager from "./RenderManager.js";
-import StateManager from "./StateManager.js";
-import behaviourManager from "./BehaviourManager.js";
-import InventoryManager from "./InventoryManager.js";
+import MovementManager from "./Managers/MovementManager.js";
+import RenderManager from "./Managers/RenderManager.js";
+import StateManager from "./Managers/StateManager.js";
+import behaviourManager from "./Managers/BehaviourManager.js";
+import InventoryManager from "./Managers/InventoryManager.js";
 
 export default class Agent {
   static nextId = 1;

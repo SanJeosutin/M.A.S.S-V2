@@ -1,4 +1,3 @@
-// Base GOAP Action
 export default class Action {
     constructor(name, cost = 1) {
       this.name          = name;
