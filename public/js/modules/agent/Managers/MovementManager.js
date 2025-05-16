@@ -1,7 +1,7 @@
 export default class MovementManager {
-  constructor(agent, baseSpeed) {
+  constructor(agent, speed) {
     this.agent = agent;
-    this.baseSpeed = baseSpeed;
+    this.speed = speed;
   }
 
   update(delta) {
@@ -16,8 +16,8 @@ export default class MovementManager {
     const speedFactor = this.agent.stateManager.isExhausted ? 0.15 : 1.0;
 
     // integrate movement
-    this.agent.position.x += this.agent.velocity.x * this.baseSpeed * speedFactor * delta;
-    this.agent.position.y += this.agent.velocity.y * this.baseSpeed * speedFactor * delta;
+    this.agent.position.x += this.agent.velocity.x * this.speed * speedFactor * delta;
+    this.agent.position.y += this.agent.velocity.y * this.speed * speedFactor * delta;
 
     // collision avoidance
     const minDist = this.agent.radius * 2;

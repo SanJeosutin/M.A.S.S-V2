@@ -24,7 +24,7 @@ export class World {
     this.bases = [];
 
     this.spawnBases(1);
-    this.spawnItems(32);
+    this.spawnItems(256);
     this.spawnAgents(4);
   }
 
@@ -60,7 +60,7 @@ export class World {
   spawnAgents(count) {
     for (var i = 1; i < count; i++) {
       if (this.bases.length === 0) break;
-      
+
       var randomIndex = Math.floor(Math.random() * this.bases.length);
       var homeBase = this.bases[randomIndex];
       // start the agent at its home base’s position:
@@ -93,7 +93,7 @@ export class World {
     if (this.paused) {
       return;
     }
-    
+
     for (var i = 0; i < this.agents.length; i++) {
       this.agents[i].update(delta);
     }
@@ -130,6 +130,17 @@ export class World {
     }
     if (position.y < 0) {
       position.y += this.cy;
+    }
+  }
+
+  remove(obj) {
+    // if it has a position and came from items array, assume it’s an item
+    if (this.items && this.items.includes(obj)) {
+      const index = this.items.indexOf(obj);
+
+      if (index !== -1) {
+        this.items.splice(index, 1);
+      }
     }
   }
 

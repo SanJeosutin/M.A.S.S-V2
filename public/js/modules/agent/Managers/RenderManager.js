@@ -7,9 +7,7 @@ export default class RenderManager {
   }
 
   draw(position, velocity, stateVars, inventoryCount, showInfo, debugEnabled, viewRange, radius) {
-    const angle = velocity.length() > 0
-      ? Math.atan2(velocity.y, velocity.x)
-      : 0;
+    const angle = velocity.length() > 0 ? Math.atan2(velocity.y, velocity.x) : 0;
 
     // draw shape
     switch (this.agent.config.shape) {
@@ -18,14 +16,14 @@ export default class RenderManager {
           {
             x: position.x + radius * Math.cos(angle),
             y: position.y + radius * Math.sin(angle)
-          }, 
-          {
-            x: position.x +  radius * Math.cos(angle +  (4 * Math.PI / 5)),
-            y: position.y +  radius * Math.sin(angle +  (4 * Math.PI / 5))
           },
           {
-            x: position.x +  radius * Math.cos(angle -  (4 * Math.PI / 5)),
-            y: position.y +  radius * Math.sin(angle -  (4 * Math.PI / 5))
+            x: position.x + radius * Math.cos(angle + (4 * Math.PI / 5)),
+            y: position.y + radius * Math.sin(angle + (4 * Math.PI / 5))
+          },
+          {
+            x: position.x + radius * Math.cos(angle - (4 * Math.PI / 5)),
+            y: position.y + radius * Math.sin(angle - (4 * Math.PI / 5))
           },
           true
         );
@@ -44,13 +42,11 @@ export default class RenderManager {
         ` 💧${stateVars.thirst.toFixed(0)} ` +
         ` 🎒${inventoryCount}`;
 
-      egi.setColor('ORANGE');
       egi.drawText(position.x + 10, position.y + 10, info);
     }
 
     // debug viewport & heading
     if (debugEnabled) {
-      egi.setColor('AQUA');
       egi.drawCircle(position, viewRange);
 
       const hd = velocity.clone().normalise();

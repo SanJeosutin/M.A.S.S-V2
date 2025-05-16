@@ -23,8 +23,8 @@ export class ReturnItemAction extends Action {
   perform(agent) {
     // navigate toward base
     const toBase = this.target.subtract(agent.position).normalise();
-    agent.velocity.x = toBase.x * agent.config.baseSpeed;
-    agent.velocity.y = toBase.y * agent.config.baseSpeed;
+    agent.velocity.x = toBase.x * agent.config.speed;
+    agent.velocity.y = toBase.y * agent.config.speed;
 
     // once arrive: deposit
     const dist = agent.position.distance(this.target);

@@ -9,33 +9,41 @@ import InventoryManager from "./Managers/InventoryManager.js";
 export default class Agent {
   static nextId = 1;
 
+  static stats = {
+    energy: 100,
+    health: 100,
+    hunger: 100,
+    thirst: 100,
+  }
+
   static defaultConfig = {
-    initialState: { energy: 100, health: 100, hunger: 100, thirst: 100 },
-    inventoryCapacity: 5,
-    baseSpeed: 50,
     drainRates: { energy: 0.01, hunger: 1.0, thirst: 1.5 },
+    inventoryCapacity: 5,
     shape: 'triangle',
+    speed: 50,
     viewRange: 50,
-    radius: 8, // collision radius
+    radius: 8,
   };
 
-  constructor(position, world, home, config = {}) {
+  constructor(position, world, home, config = {}, stats = {}) {
     this.id = Agent.nextId++;
 
     this.world = world;
     this.home = home;
     this.color = home.color;
     this.config = { ...Agent.defaultConfig, ...config };
+    this.stats = { ...Agent.stats, ...stats };
 
     // State, Inventory, Movement, behaviour, Rendering
-    this.inventory = new InventoryManager(this.config.inventoryCapacity);
     this.position = position.clone();
     this.velocity = new Vector2D(0, 0);
     this.viewRange = this.config.viewRange;
     this.radius = this.config.radius;
 
-    this.stateManager = new StateManager(this.config.initialState, this.config.drainRates);
-    this.movementManager = new MovementManager(this, this.config.baseSpeed);
+    this.inventory = new InventoryManager(this.config.inventoryCapacity);
+
+    this.stateManager = new StateManager(this.stats, this.config.drainRates);
+    this.movementManager = new MovementManager(this, this.config.speed);
     this.behaviourManager = new behaviourManager(this);
     this.renderManager = new RenderManager(this, this.world.ctx, this.config.shape);
 
