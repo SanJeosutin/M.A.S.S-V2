@@ -81,7 +81,7 @@ export default class behaviourManager {
     if (this.currentAction) {
       const succeeded = this.currentAction.perform(this.agent);
       if (succeeded) {
-        this.currentAction.isDone = true;
+        this.currentAction.isDone();
         this.currentAction = null;    // so on next tick we re-plan
       }
     }

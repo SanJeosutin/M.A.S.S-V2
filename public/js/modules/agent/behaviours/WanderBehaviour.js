@@ -29,6 +29,7 @@ export default class WanderBehaviour {
     for (let i = 0; i < this.agent.world.items.length; i++) {
       const item = this.agent.world.items[i];
       const dist = this.agent.position.distance(item.position);
+      
       // assume both have a `radius` for trigger range
       if (dist <= this.agent.radius + item.radius) {
         // pick it up immediately
