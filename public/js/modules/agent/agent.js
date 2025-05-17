@@ -26,9 +26,11 @@ export default class Agent {
     drainRates: { energy: 0.01, hunger: 1.0, thirst: 1.5 },
     inventoryCapacity: 5,
     shape: 'triangle',
-    speed: 5,
     viewRange: 125,
     radius: 8,
+    speed: 50,
+    mass: 5,  // lower = more responsive, higher = “heavier”
+    force: 10,    // tweak to control acceleration
   };
 
   constructor(position, world, home, config = {}, stats = {}, steerConfig = {}) {
@@ -46,6 +48,9 @@ export default class Agent {
     this.velocity = new Vector2D(0, 0);
     this.viewRange = this.config.viewRange;
     this.radius = this.config.radius;
+
+    this.mass = this.config.mass;
+    this.maxForce = this.config.force;
     this.baseSpeed = this.config.speed;
     this.maxSpeed = this.config.speed;
 
@@ -56,7 +61,6 @@ export default class Agent {
     this.wanderRadius = this.steerConfig.wanderRadius;
     this.wanderDistance = this.steerConfig.wanderDistance;
     this.wanderJitter = this.steerConfig.wanderJitter;
-
 
     this.inventory = new InventoryManager(this.config.inventoryCapacity);
     this.stateManager = new StateManager(this.stats, this.config.drainRates);
@@ -75,9 +79,27 @@ export default class Agent {
     // determine behaviour (updates velocity through steering)
     this.behaviourManager.update(delta);
 
-    // apply steering velocity to position
-    const step = this.velocity.clone().multiply(delta);
-    this.position = this.position.add(step);
+    let steeringForce = this.behaviourManager.update(this, delta);
+    // guard against undefined or invalid return
+    if (!(steeringForce instanceof Vector2D)) {
+      steeringForce = new Vector2D(0, 0);
+    }
+
+    // 3) Convert steering force into acceleration: a = F / m
+    const acceleration = steeringForce.clone().divide(this.mass);
+
+    // 4) Integrate velocity: v = v + a * dt
+    this.velocity.add(acceleration.multiply(delta))
+      .truncate(this.maxSpeed);
+
+    // 5) Integrate position: p = p + v * dt
+    this.position.add(this.velocity.clone().multiply(delta));
+
+    // 6) Apply damping when no steering to avoid coasting
+    if (steeringForce.length() < 0.01) {
+      const damping = this.config.dampingFactor ?? 0.9;
+      this.velocity.multiply(damping);
+    }
 
     // optional: also let MovementManager handle GOAP moveToward
     this.movementManager.update(delta);

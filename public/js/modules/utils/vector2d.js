@@ -79,10 +79,11 @@ export class Vector2D {
   }
 
   // truncate length to max
-  truncate(maxLength) {
-    if (this.length() > maxLength) {
+  truncate(max) {
+    const len = this.length();
+    if (len > max) {
       this.normalise();
-      this.multiplyScalar(maxLength);
+      this.multiply(max);
     }
     return this;
   }

@@ -4,9 +4,9 @@ import { Vector2D } from "../../utils/vector2d.js";
  * Deceleration lookup for the arrive behavior.
  */
 export const DECELERATION_SPEEDS = {
-  slow:   3,
-  normal: 2,
-  fast:   1
+  slow: 9,
+  normal:5,
+  fast: 2
 };
 
 /**
@@ -36,8 +36,14 @@ export function wander(agent, delta) {
     agent.side
   ).transformPoint(localTarget);
 
+  const rawSteer = worldTarget
+    .subtract(agent.position)
+    .subtract(agent.velocity);
+
+  return clampForce(rawSteer, agent.maxForce);
+
   // steering = desired - current velocity
-  return worldTarget.subtract(agent.position).subtract(agent.velocity);
+  //return worldTarget.subtract(agent.position).subtract(agent.velocity);
 }
 
 /**
@@ -48,10 +54,13 @@ export function wander(agent, delta) {
  */
 export function seek(agent, targetPos) {
   const desired = targetPos
+    .clone()
     .subtract(agent.position)
     .normalise()
     .multiply(agent.maxSpeed);
-  return desired.subtract(agent.velocity);
+
+  const rawSteer = desired.subtract(agent.velocity);
+  return clampForce(rawSteer, agent.maxForce);
 }
 
 /**
@@ -62,14 +71,14 @@ export function seek(agent, targetPos) {
  * @returns {Vector2D} steering force
  */
 export function arrive(agent, targetPos, decelType = 'normal') {
-  const toTarget = targetPos.subtract(agent.position);
+  const toTarget = targetPos.clone().subtract(agent.position);
   const dist = toTarget.length();
   if (dist > 0) {
     const decel = DECELERATION_SPEEDS[decelType] || DECELERATION_SPEEDS.normal;
-    let speed = dist / decel;
-    speed = Math.min(speed, agent.maxSpeed);
+    let speed = Math.min(dist / decel, agent.maxSpeed);
     const desired = toTarget.multiply(speed / dist);
-    return desired.subtract(agent.velocity);
+    const rawSteer = desired.subtract(agent.velocity);
+    return clampForce(rawSteer, agent.maxForce);
   }
   return new Vector2D(0, 0);
 }
