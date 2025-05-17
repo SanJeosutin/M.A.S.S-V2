@@ -24,8 +24,8 @@ export class World {
     this.bases = [];
 
     this.spawnBases(1);
-    this.spawnItems(256);
-    this.spawnAgents(4);
+    this.spawnItems(32);
+    this.spawnAgents(2);
   }
 
   togglePause() {

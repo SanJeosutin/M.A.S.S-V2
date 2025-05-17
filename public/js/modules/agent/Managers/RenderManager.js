@@ -50,19 +50,24 @@ export default class RenderManager {
       egi.drawCircle(position, viewRange);
 
       const hd = velocity.clone().normalise();
-      const hx = position.x + hd.x * 20;
-      const hy = position.y + hd.y * 20;
+      const speed = velocity.length();
+      const arrowLen = speed * 0.75;
 
-      egi.context.beginPath();
-      egi.context.moveTo(position.x, position.y);
-      egi.context.lineTo(hx, hy);
-      egi.context.stroke();
+      const tip = {
+        x: position.x + hd.x * arrowLen,
+        y: position.y + hd.y * arrowLen
+      };
 
-      egi.drawText(
-        position.x + 8,
-        position.y + 14,
-        'Speed: ' + velocity.length().toFixed(1)
-      );
+      // 4) Draw arrow for “where I’m heading”
+      egi.setStrokeColor('YELLOW');
+      egi.setStrokeWidth(2);
+      egi.drawLineWithArrow(position, tip, radius * 1.5);
     }
+
+    egi.drawText(
+      position.x + 8,
+      position.y + 14,
+      'Speed: ' + velocity.length().toFixed(1)
+    );
   }
 }

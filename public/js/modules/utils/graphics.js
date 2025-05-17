@@ -96,4 +96,36 @@ export const egi = {
     this.context.textAlign = align;
     this.context.fillText(text, x, y);
   },
+
+  drawLineWithArrow(v1, v2, size = 10) {
+    // direction vector
+    const dx = v2.x - v1.x;
+    const dy = v2.y - v1.y;
+    const len = Math.hypot(dx, dy);
+    if (len < 1e-6) return;
+    const nx = dx / len;
+    const ny = dy / len;
+    // point where arrowhead begins
+    const xpoint = { x: v2.x - nx * size, y: v2.y - ny * size };
+    // perpendicular vector
+    const perpX = -ny;
+    const perpY = nx;
+    // arrowhead points
+    const ap1 = { x: xpoint.x + perpX * size * 0.4, y: xpoint.y + perpY * size * 0.4 };
+    const ap2 = { x: xpoint.x - perpX * size * 0.4, y: xpoint.y - perpY * size * 0.4 };
+
+    // draw shaft
+    this.context.beginPath();
+    this.context.moveTo(v1.x, v1.y);
+    this.context.lineTo(xpoint.x, xpoint.y);
+    this.context.stroke();
+
+    // draw arrowhead
+    this.context.beginPath();
+    this.context.moveTo(v2.x, v2.y);
+    this.context.lineTo(ap1.x, ap1.y);
+    this.context.lineTo(ap2.x, ap2.y);
+    this.context.closePath();
+    this.context.stroke();
+  },
 };

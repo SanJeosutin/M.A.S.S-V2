@@ -80,4 +80,8 @@ export class Item {
             'left'
         );
     }
+
+    get isUseful() {
+        return Object.values(this.stats).some(v => v > 0);
+    }
 }
